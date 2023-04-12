@@ -170,3 +170,54 @@ x_test, y_test = x_test.to(device), y_test.to(device)
 outputs = model(x_test)
 
 loss = criterion(outputs, y_test.unsqueeze(1))
+    test_loss += loss.item()
+
+    test_acc += (outputs.round() == y_test.unsqueeze(1)).float().mean()
+
+    if steps >= test_generator.__len__():
+
+        break
+
+    test_loss += loss.item()
+
+    test_acc += (outputs.round() == y_test.unsqueeze(1)).float().mean()
+
+    if steps >= test_generator.__len__():
+test_loss = 0
+
+test_acc = 0
+
+steps = 0
+
+with torch.no_grad():
+
+    for i, data in enumerate(test_generator):
+
+        steps += 1
+
+        x_test, y_test = data
+
+        x_test, y_test = x_test.to(device), y_test.to(device)
+
+        outputs = model(x_test)
+
+        loss = criterion(outputs, y_test.unsqueeze(1))
+
+        test_loss += loss.item()
+
+        test_acc += (outputs.round() == y_test.unsqueeze(1)).float().mean()
+
+        if steps >= test_generator.__len__():
+
+            break
+
+test_loss /= steps
+
+test_acc /= steps
+
+print('Test Loss: {:.4f}, Test Accuracy: {:.4f}'.format(test_loss, test_acc))
+
+
+        break
+
+print('Test loss: {:.4f}, Test accuracy: {:.4f}'.format(test_loss/steps, test_acc/steps))
